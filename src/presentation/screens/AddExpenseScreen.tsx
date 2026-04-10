@@ -10,6 +10,7 @@ import { expenseSchema, ExpenseFormData } from '../hooks/useExpenseForm';
 import { colors, spacing, borderRadius } from '../../core/theme';
 import { RootStackParamList } from '../navigation/types';
 import dayjs from 'dayjs';
+import { useHaptics } from '../hooks/useHaptics';
 
 type AddExpenseRouteProp = RouteProp<RootStackParamList, 'AddExpense'>;
 
@@ -17,6 +18,7 @@ export const AddExpenseScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute<AddExpenseRouteProp>();
   const { addExpense, updateExpense, isLoading } = useExpenseStore();
+  const haptics = useHaptics();
   const [scannedImage, setScannedImage] = useState<{
     uri: string;
     fileName: string;
@@ -47,12 +49,14 @@ export const AddExpenseScreen: React.FC = () => {
         } else {
           await addExpense(data);
         }
+        haptics.success();
         navigation.goBack();
       } catch {
+        haptics.error();
         Alert.alert('Error', 'Failed to save expense. Please try again.');
       }
     },
-    [addExpense, updateExpense, navigation, isEditing, existingExpense],
+    [haptics, addExpense, updateExpense, navigation, isEditing, existingExpense],
   );
 
   const onCancel = useCallback(() => {

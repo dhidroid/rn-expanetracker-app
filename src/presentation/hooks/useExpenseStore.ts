@@ -9,6 +9,8 @@ import {
   GetCategoryTotalsUseCase,
 } from '../../application/useCases';
 import { expenseRepository } from '../../infrastructure/repositories';
+import { NotificationService } from '../../infrastructure/notifications/notificationService';
+import { SecureStorage, SecureStorageKeys } from '../../infrastructure/storage/secureStorage';
 
 interface ExpenseState {
   expenses: Expense[];
@@ -81,6 +83,9 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       await get().loadExpenses();
       const now = new Date();
       await get().loadMonthlyData(now.getFullYear(), now.getMonth() + 1);
+      // Trigger budget alerts
+      const income = SecureStorage.getNumber(SecureStorageKeys.MONTHLY_INCOME) || 0;
+      await NotificationService.checkAndNotify(income, get().monthlyTotal);
     } catch (e) {
       set({ error: (e as Error).message, isLoading: false });
     }
@@ -93,6 +98,9 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
       await get().loadExpenses();
       const now = new Date();
       await get().loadMonthlyData(now.getFullYear(), now.getMonth() + 1);
+      // Trigger budget alerts
+      const income = SecureStorage.getNumber(SecureStorageKeys.MONTHLY_INCOME) || 0;
+      await NotificationService.checkAndNotify(income, get().monthlyTotal);
     } catch (e) {
       set({ error: (e as Error).message, isLoading: false });
     }

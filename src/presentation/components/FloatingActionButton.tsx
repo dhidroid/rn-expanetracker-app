@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { colors, spacing, borderRadius } from '../../core/theme';
+import { colors, spacing, borderRadius, glassShadow } from '../../core/theme';
+import { useHaptics } from '../hooks/useHaptics';
 
 interface FloatingActionButtonProps {
   onPress: () => void;
@@ -9,10 +10,17 @@ interface FloatingActionButtonProps {
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   onPress,
 }) => {
+  const haptics = useHaptics();
+
+  const handlePress = useCallback(() => {
+    haptics.heavy();
+    onPress();
+  }, [haptics, onPress]);
+
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={onPress}
+      onPress={handlePress}
       activeOpacity={0.8}
     >
       <Text style={styles.icon}>+</Text>
@@ -25,21 +33,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: spacing.xl,
     right: spacing.xl,
-    width: 56,
-    height: 56,
+    width: 60,
+    height: 60,
     borderRadius: borderRadius.full,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.glass,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
+    ...glassShadow.medium,
   },
   icon: {
     fontSize: 32,
-    color: colors.white,
+    color: colors.primary,
     fontWeight: '300',
     marginTop: -2,
   },

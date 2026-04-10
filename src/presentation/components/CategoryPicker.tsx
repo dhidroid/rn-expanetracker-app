@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ExpenseCategory } from '../../domain/entities';
 import {
@@ -7,6 +7,7 @@ import {
   CATEGORY_ICON_COMPONENTS,
 } from '../../core/constants';
 import { colors, spacing, borderRadius, typography } from '../../core/theme';
+import { useHaptics } from '../hooks/useHaptics';
 
 interface CategoryPickerProps {
   selected: ExpenseCategory | null;
@@ -19,6 +20,15 @@ export const CategoryPicker: React.FC<CategoryPickerProps> = ({
   onSelect,
   error,
 }) => {
+  const haptics = useHaptics();
+
+  const handleSelect = useCallback(
+    (category: import('../../domain/entities').ExpenseCategory) => {
+      haptics.selection();
+      onSelect(category);
+    },
+    [haptics, onSelect],
+  );
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Category</Text>
@@ -35,7 +45,7 @@ export const CategoryPicker: React.FC<CategoryPickerProps> = ({
                   borderColor: CATEGORY_COLORS[cat.value],
                 },
               ]}
-              onPress={() => onSelect(cat.value)}
+              onPress={() => handleSelect(cat.value)}
             >
               <IconComponent
                 size={24}

@@ -41,14 +41,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   input: {
-    backgroundColor: colors.surfaceVariant,
-    borderRadius: borderRadius.md,
+    backgroundColor: colors.glass,
+    borderRadius: borderRadius.lg,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     fontSize: 16,
     color: colors.text,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.glassBorder,
   },
   inputError: {
     borderColor: colors.error,

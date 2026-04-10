@@ -8,3 +8,4 @@ export * from './SummaryCard';
 export * from './ErrorBoundary';
 export * from './FloatingActionButton';
 export * from './InvoiceScanner';
+export * from './CustomBarChart';

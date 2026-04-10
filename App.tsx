@@ -4,12 +4,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AppNavigator } from './src/presentation/navigation';
 import { ErrorBoundary } from './src/presentation/components';
-import { useIsDarkMode } from './src/presentation/hooks/useTheme';
 
 function App(): React.JSX.Element {
   const systemColorScheme = useColorScheme();
-  const isDarkMode = useIsDarkMode();
-  const isDark = isDarkMode ?? systemColorScheme === 'dark';
+  const isDark = systemColorScheme === 'dark';
 
   return (
     <GestureHandlerRootView>

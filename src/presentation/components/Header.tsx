@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { spacing, typography } from '../../core/theme';
-import { useTheme } from '../hooks/useTheme';
+import { spacing, typography, colors } from '../../core/theme';
 import { ChevronLeft } from 'lucide-react-native/icons';
 
 interface HeaderProps {
@@ -19,17 +18,16 @@ export const Header: React.FC<HeaderProps> = ({
   rightAction,
 }) => {
   const insets = useSafeAreaInsets();
-  const colors = useTheme();
 
   return (
     <View
       style={[
         styles.container,
         {
-          paddingTop: insets.top || spacing.md,
-          paddingHorizontal: Math.max(insets.left, insets.right) || spacing.md,
-          backgroundColor: colors.surface,
-          borderBottomColor: colors.border,
+          paddingTop: (insets.top || spacing.md) + spacing.sm,
+          paddingHorizontal: Math.max(insets.left, insets.right) || spacing.lg,
+          backgroundColor: colors.glass,
+          borderBottomColor: colors.glassBorder,
         },
       ]}
     >
@@ -52,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    paddingBottom: 20,
+    paddingBottom: spacing.md,
   },
   left: {
     width: 40,
@@ -64,6 +62,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.h3,
+    fontWeight: '600',
   },
   backButton: {
     padding: spacing.xs,

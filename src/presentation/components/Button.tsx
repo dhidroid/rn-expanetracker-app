@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -7,7 +7,8 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { colors, borderRadius, spacing } from '../../core/theme';
+import { colors, borderRadius, spacing, glassShadow } from '../../core/theme';
+import { useHaptics } from '../hooks/useHaptics';
 
 interface ButtonProps {
   title: string;
@@ -28,6 +29,19 @@ export const Button: React.FC<ButtonProps> = ({
   loading = false,
   style,
 }) => {
+  const haptics = useHaptics();
+
+  const handlePress = useCallback(() => {
+    if (variant === 'danger') {
+      haptics.heavy();
+    } else if (variant === 'outline' || variant === 'secondary') {
+      haptics.light();
+    } else {
+      haptics.impact();
+    }
+    onPress();
+  }, [haptics, onPress, variant]);
+
   const buttonStyles = [
     styles.base,
     styles[variant],
@@ -45,7 +59,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <TouchableOpacity
       style={buttonStyles}
-      onPress={onPress}
+      onPress={handlePress}
       disabled={disabled || loading}
       activeOpacity={0.7}
     >
@@ -64,33 +78,37 @@ const styles = StyleSheet.create({
   base: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.lg,
   },
   primary: {
     backgroundColor: colors.primary,
+    ...glassShadow.light,
   },
   secondary: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.glass,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
   },
   outline: {
     backgroundColor: 'transparent',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: colors.primary,
   },
   danger: {
     backgroundColor: colors.error,
+    ...glassShadow.light,
   },
   small: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   medium: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.lg,
-  },
-  large: {
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.xl,
+  },
+  large: {
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.xxl,
   },
   disabled: {
     opacity: 0.5,
@@ -102,7 +120,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   secondaryText: {
-    color: colors.white,
+    color: colors.text,
   },
   outlineText: {
     color: colors.primary,

@@ -1,6 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, borderRadius, typography } from '../../core/theme';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  typography,
+  glassShadow,
+} from '../../core/theme';
 
 interface SummaryCardProps {
   title: string;
@@ -20,9 +26,11 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.amount}>{formattedAmount}</Text>
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+      <View style={styles.glassOverlay}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.amount}>{formattedAmount}</Text>
+        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+      </View>
     </View>
   );
 };
@@ -30,19 +38,29 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
-    padding: spacing.lg,
-    borderRadius: borderRadius.lg,
+    borderRadius: borderRadius.xxl,
     marginBottom: spacing.md,
+    ...glassShadow.medium,
+    overflow: 'hidden',
+  },
+  glassOverlay: {
+    backgroundColor: colors.glass,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
+    padding: spacing.xl,
+    paddingTop: spacing.lg,
   },
   title: {
     ...typography.bodySmall,
     color: colors.white,
-    opacity: 0.8,
+    opacity: 0.9,
+    fontWeight: '500',
   },
   amount: {
     ...typography.h1,
     color: colors.white,
-    marginVertical: spacing.xs,
+    marginVertical: spacing.sm,
+    fontWeight: '700',
   },
   subtitle: {
     ...typography.caption,

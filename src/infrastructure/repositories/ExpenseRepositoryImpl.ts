@@ -1,6 +1,7 @@
 import { Expense, ExpenseCategory, ExpenseDTO } from '../../domain/entities';
 import { ExpenseRepository } from '../../domain/repositories';
 import { storage, StorageKeys } from '../storage';
+import { SyncService } from '../supabase/syncService';
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -53,6 +54,7 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
     };
     expenses.push(newExpense);
     saveExpensesToStorage(expenses);
+    SyncService.addToPendingSync(newExpense);
     return newExpense;
   }
 
@@ -70,6 +72,7 @@ export class ExpenseRepositoryImpl implements ExpenseRepository {
     };
     expenses[index] = updatedExpense;
     saveExpensesToStorage(expenses);
+    SyncService.addToPendingSync(updatedExpense);
     return updatedExpense;
   }
 

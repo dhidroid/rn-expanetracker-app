@@ -2,3 +2,8 @@ export * from './HomeScreen';
 export * from './AddExpenseScreen';
 export * from './AnalyticsScreen';
 export * from './SettingsScreen';
+export * from './ServiceDetailScreen';
+export * from './TransactionDetailScreen';
+export * from './AddIncomeScreen';
+export * from './ReportsScreen';
+export * from './AIInsightsScreen';

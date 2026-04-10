@@ -7,4 +7,6 @@ export const storage = new MMKV({
 export const StorageKeys = {
   EXPENSES: 'expenses',
   SETTINGS: 'settings',
+  PENDING_SYNC: 'pending_sync',
+  PENDING_INCOMES_SYNC: 'pending_incomes_sync',
 } as const;
